@@ -19,60 +19,127 @@
 # Creating all the variables here
 import random
 
+#Deck of Cards
 values = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace']
 suites = ['Hearts', 'Clubs', 'Diamonds', 'Spades']
 deck = [[v + ' of ' + s,v] for s in suites for v in values] 
 bet = 0
-sum = 0
+playersSum =0
+playersDeck = [""],[""]
+dealersSum = 0
+dealersDeck = [""],[""]
+p = [[]]
+cardsLeft = 52
+
 
     
+#Starting message
+def gameLoop():
+    print("********************************")
+    print("Blackjack Console Version 1.0")
+    users_input = input("To start - enter in the amount you are betting. (Please do not enter without putting a value down)    " + "\n" )
+    while users_input <5 :
+        users_input = input("Minimum amount you can bet is 5. Bet again.")
+
+def getValue(card):
+    val = "int"
+    try:
+        val = int(card[1]) 
+        return val-1
+    except ValueError: 
+        return 10
+    
+
+
+def drawCardPlayer():
+    global playersSum
+    global cardsLeft
+    index = random.randint(1,cardsLeft)
+    cardsLeft -=1
+    c = deck[index]
+    playersDeck[0].append(c)
+    value = getValue(deck[index])
+    playersSum += value
+    print(c) ; del deck[index]
+    value = getValue(c)
+    print("This is the sum",playersSum)
+    print("********************************")
+
+def drawCardDealer():
+    global dealersSum
+    global cardsLeft
+    index = random.randint(1,cardsLeft)
+    cardsLeft -=1
+    c = deck[index]
+    dealersDeck[0].append(c)
+    value = getValue(deck[index])
+    dealersSum += value
+    del deck[index]
+    print("This is the Dealers sum : ",dealersSum)
+    print("********************************")
+
+def computeScore():
+    if(playerSum < 21 and dealersSum < 21) :
+        if playersSum > dealersSum :
+            print("Congratulations you have won!!!")
+        elif playersSum < dealersSum :
+            print("Awww. You lost. Thats sad. :()")
+        else :
+            print("Well its a tie.")
+    
+    elif(playerSum > 21 and dealersSum > 21):
+            print("Awww. You lost. Thats sad. :()")
+
+    else:
+            print("Awww. You lost. Thats sad. :()")
+    print("********************************")
+
+
+        
 
     
-class Card:
-    # def__init__(self, number, suit):
-    #     self.number = number
-    #     self.suit = suit
-
-    def __init__(self, number, suit, ):
-        self.number = number
-        self.suit = suit
-
-    def getValue(self):
-        if self.number>15 and self.number<23: return 10
-        else: pass
-        return self.number
-
-    def getSuit(self):
-        return self.suit
-
-    def __str__(self):
-        return str(self.number) + " of " + self.suit
-
-
-class Game:
-    def line(self):
-        return  "----------------------------------------------"
-
     
-# Consider this as my main
+def hitOrStand():
+    global playersSum, dealersSum
+    i = ""
+    while(i!="stand" and playersSum<21 and dealersSum < 21):
+        i = raw_input("Would you like to hit or stand? (Hit means to draw another card; Stand means to not.)" + "\n")
+        if i == "hit":
+            drawCardPlayer()
+            drawCardDealer()
+            displayCards()
+        else: 
+            computeScore()
+    computeScore()
 
-print("Blackjack Console Version 1.0")
-myCard = Card(5,'Diamonds')
+def displayCards():
+    print("\n" + "Your cards : ")
+    for x in range(len(playersDeck)):
+        print (playersDeck[x])
+        print "Your total : " , playersSum
+    
+    print("\n" + "Dealers cards : ")
+    for x in range(len(dealersDeck)):
+        print (dealersDeck[x])
+        print("Dealers total : " ,dealersSum)
 
 
-users_input = input("To start - enter in the amount you are betting. (Please do not enter without putting a value down)    ")
-while users_input <5 :
-    users_input = input("Minimum amount you can bet is 5.")
 
-print("Your cards : ")
-index = random.randint(1,52)
-print(deck[index]) ; del deck[index]
-sum = deck[index]
+#Consider this as my main sequence : 
 
-index = random.randint(1,51)
-print(deck[index]) ; del deck[index]
-sum = deck[index]
-print(sum)
+gameLoop()
+drawCardPlayer()
+drawCardDealer()
+displayCards()
+print("********************************")
+hitOrStand()
+   
+    
+    
+
+
+
+# To run : python main.py
 
 
 
