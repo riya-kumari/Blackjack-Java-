@@ -167,8 +167,6 @@ def runSequence():
 # This method gets the game started the first time. 
 runSequence()
 
-
-
 # To run : python main.py
 
 
